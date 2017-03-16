@@ -58,7 +58,7 @@ class Command(BaseCommand):
 
                 site = ReviewsSite.objects.filter(name=entry['website']).first()
 
-                if movie and site:
+                if movie and site and entry['score'] and entry['num_reviews']:
                     review = MovieReview(movie=movie, site=site, score=entry['score'], users=entry['num_reviews'])
                     review.save()
                     print("Created review", review)

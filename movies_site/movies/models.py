@@ -20,8 +20,11 @@ class Person(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
 
-    def __str__(self):
+    def full_name(self):
         return "{0} {1}".format(self.first_name, self.last_name)
+
+    def __str__(self):
+        return self.full_name()
 
 
 class Movie(models.Model) :
@@ -32,7 +35,7 @@ class Movie(models.Model) :
     description = models.CharField(max_length=500, blank=True)
     storyline = models.TextField(blank=True)
     cover = models.ImageField(upload_to=movie_cover_path)
-    genres = models.ManyToManyField(Genre)
+    genres = models.ManyToManyField(Genre, related_name="movies")
     actors = models.ManyToManyField(Person, related_name="acting_movies")
     directors = models.ManyToManyField(Person, related_name="directing_movies")
 

@@ -1,0 +1,14 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+.movie.card .card-content {
+    height: 100px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.movie.card .card-title {
+    font-size: 16px;
+    color: black;
+}

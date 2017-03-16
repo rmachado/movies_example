@@ -1,20 +1,27 @@
 # -*- coding: utf-8 -*-
 import scrapy
+from datetime import datetime
 from movies_scraper.items import MovieItem
 
+YEARS_TO_SCRAPE = 15
 
 class ImdbSpider(scrapy.Spider):
     name = "IMDb"
     allowed_domains = ["www.imdb.com"]
-    start_urls = ['http://www.imdb.com/movies-in-theaters/?ref_=nv_mv_inth_1']
+    start_urls = ['http://www.imdb.com']
 
     def parse(self, response):
+        current_year = datetime.now().year
+        year_url = 'http://www.imdb.com/search/title?release_date={0}&view=simple'
+
+        for year in range(current_year - YEARS_TO_SCRAPE, current_year + 1):
+            yield scrapy.Request(year_url.format(year), callback=self.parse_list)
+
+    def parse_list(self, response):
         sel = scrapy.Selector(response=response)
-
-        movies_urls = sel.css('.list .list_item h4 a::attr(href)').extract()
-
-        for url in movies_urls:
-            yield scrapy.Request(response.urljoin(url), callback=self.parse_movie)
+        links = sel.xpath('//div[@class="lister-list"]//span[@class="lister-item-header"]//a/@href').extract()
+        for link in links:
+            yield scrapy.Request(response.urljoin(link), callback=self.parse_movie)
 
     def parse_movie(self, response):
         sel = scrapy.Selector(response=response)

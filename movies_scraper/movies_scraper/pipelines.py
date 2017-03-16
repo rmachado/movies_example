@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+from scrapy.exceptions import DropItem
 
 class MoviesPipeline(object):
     """ Processes movies fields and create related items."""
@@ -12,6 +13,8 @@ class MoviesPipeline(object):
 
         if item["year"]:
             item["year"] = int(item["year"])
+        else:
+            raise DropItem("Missing year")
 
         if item["score"]:
             item["score"] = float(item["score"])
