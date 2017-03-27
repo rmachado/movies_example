@@ -3,7 +3,6 @@ import scrapy
 from datetime import datetime
 from movies_scraper.items import MovieItem
 
-YEARS_TO_SCRAPE = 15
 
 class ImdbSpider(scrapy.Spider):
     name = "IMDb"
@@ -13,8 +12,9 @@ class ImdbSpider(scrapy.Spider):
     def parse(self, response):
         current_year = datetime.now().year
         year_url = 'http://www.imdb.com/search/title?release_date={0}&view=simple'
+        years = self.settings.getint('YEARS_TO_SCRAPE')
 
-        for year in range(current_year - YEARS_TO_SCRAPE, current_year + 1):
+        for year in range(current_year - years, current_year + 1):
             yield scrapy.Request(year_url.format(year), callback=self.parse_list)
 
     def parse_list(self, response):

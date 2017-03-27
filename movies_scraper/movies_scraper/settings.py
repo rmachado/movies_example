@@ -14,12 +14,14 @@ BOT_NAME = 'movies_scraper'
 SPIDER_MODULES = ['movies_scraper.spiders']
 NEWSPIDER_MODULE = 'movies_scraper.spiders'
 
+YEARS_TO_SCRAPE = 15
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'movies_scraper (+http://www.yourdomain.com)'
+# USER_AGENT = 'movies_scraper (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -65,7 +67,9 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'movies_scraper.pipelines.MoviesPipeline': 300,
+   'movies_scraper.pipelines.IMDbPipeline': 300,
+   'movies_scraper.pipelines.MetacriticPipeline': 301,
+   'movies_scraper.pipelines.RottenTomatoesPipeline': 302
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

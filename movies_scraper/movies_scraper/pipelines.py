@@ -2,10 +2,13 @@
 import re
 from scrapy.exceptions import DropItem
 
-class MoviesPipeline(object):
-    """ Processes movies fields and create related items."""
+class IMDbPipeline(object):
+    """ Processes IMDb movies fields and create related items."""
 
     def process_item(self, item, spider):
+        if item["website"] != "IMDb":
+            return item
+
         item["title"] = item["title"].strip()
         item["description"] = item["description"].strip()
         item["storyline"] = item["storyline"].strip()
@@ -20,7 +23,7 @@ class MoviesPipeline(object):
             item["score"] = float(item["score"])
 
         if item["num_reviews"]:
-            item["num_reviews"] = float(item["num_reviews"].replace(',', '.'))
+            item["num_reviews"] = int(item["num_reviews"].replace(',', ''))
 
         # A little hack to get the full sized image from IMDb
         if item["cover"] and "@._V1_UX182_CR0,0,182,268_AL_" in item["cover"]:
@@ -30,6 +33,36 @@ class MoviesPipeline(object):
         item["actors"] = [split_person_name(name) for name in item["actors"]]
 
         return item
+
+class MetacriticPipeline(object):
+    """ Processes Metacritic movies fields and create related items."""
+
+    def process_item(self, item, spider):
+        if item["website"] != "metacritic":
+            return item
+
+        item["title"] = item["title"].strip()
+        item["year"] = int(item["year"])
+        item["score"] = float(item["score"])
+        item["num_reviews"] = int(re.search(r"\d+", item["num_reviews"])[0])
+
+        return item
+
+
+class RottenTomatoesPipeline(object):
+    """ Processes RottenTomatoes movies fields and create related items."""
+
+    def process_item(self, item, spider):
+        if item["website"] != "rottentomatoes":
+            return item
+
+        item["title"] = item["title"].strip()
+        item["year"] = int(item["year"])
+        item["score"] = float(re.search(r"\d+", item["score"])[0])
+        item["num_reviews"] = int(item["num_reviews"])
+
+        return item
+
 
 def convert_duration_to_minutes(text):
     """Converts a duration text in the form '1h 20min' to minutes."""
