@@ -27,7 +27,7 @@ class ImdbSpider(scrapy.Spider):
         sel = scrapy.Selector(response=response)
         movie = MovieItem()
 
-        movie["website"] = self.name
+        movie["website"] = "IMDb"
         movie["title"] = sel.xpath('//h1[@itemprop="name"]/text()').extract_first()
         movie["year"] = sel.xpath('//span[@id="titleYear"]/a/text()').extract_first()
         movie["duration"] = sel.xpath('//time[@itemprop="duration"]/text()').extract_first()

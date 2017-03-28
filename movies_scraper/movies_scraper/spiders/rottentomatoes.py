@@ -25,7 +25,7 @@ class RottentomatoesSpider(scrapy.Spider):
         for review in reviews[1:]:
             movie = MovieItem()
 
-            movie["website"] = self.name
+            movie["website"] = "Rotten Tomatoes"
             title = review.xpath('.//td/a/text()').extract_first()
             print(title)
             movie["title"], movie["year"] = re.search(r'(.+) \((\d+)\)', title).groups()

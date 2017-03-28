@@ -38,12 +38,12 @@ class MetacriticPipeline(object):
     """ Processes Metacritic movies fields and create related items."""
 
     def process_item(self, item, spider):
-        if item["website"] != "metacritic":
+        if item["website"] != "Metacritic":
             return item
 
         item["title"] = item["title"].strip()
         item["year"] = int(item["year"])
-        item["score"] = float(item["score"])
+        item["score"] = float(item["score"]) / 10
         item["num_reviews"] = int(re.search(r"\d+", item["num_reviews"])[0])
 
         return item
@@ -53,12 +53,12 @@ class RottenTomatoesPipeline(object):
     """ Processes RottenTomatoes movies fields and create related items."""
 
     def process_item(self, item, spider):
-        if item["website"] != "rottentomatoes":
+        if item["website"] != "Rotten Tomatoes":
             return item
 
         item["title"] = item["title"].strip()
         item["year"] = int(item["year"])
-        item["score"] = float(re.search(r"\d+", item["score"])[0])
+        item["score"] = float(re.search(r"\d+", item["score"])[0]) / 10
         item["num_reviews"] = int(item["num_reviews"])
 
         return item

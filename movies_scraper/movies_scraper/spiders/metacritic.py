@@ -27,7 +27,7 @@ class MetacriticSpider(scrapy.Spider):
         sel = scrapy.Selector(response=response)
         movie = MovieItem()
 
-        movie["website"] = self.name
+        movie["website"] = "Metacritic"
         movie["title"] = sel.xpath('//div[contains(@class,"product_page_title")]/h1/text()').extract_first()
         movie["year"] = sel.xpath('//div[contains(@class,"product_page_title")]/span/text()').extract_first()
         movie["score"] = sel.xpath('//a[@class="metascore_anchor"]/span/text()').extract_first()
