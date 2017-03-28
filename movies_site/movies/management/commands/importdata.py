@@ -14,6 +14,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # transaction.set_autocommit(False)
 
+        created = 0
+        reviews = 0
+
         for file in options['file']:
             entries = []
 
@@ -31,6 +34,7 @@ class Command(BaseCommand):
                     movie.duration = entry['duration']
                     movie.description = entry['description']
                     movie.storyline = entry['storyline']
+                    movie.cover = entry['cover']
                     movie.save()
 
                     for genre_name in entry['genres']:
@@ -51,17 +55,23 @@ class Command(BaseCommand):
                         if created:
                             print("Created actor", name)
 
+                    created += 1
                     print("Created movie", movie)
 
+                elif not is_imdb and not movie:
+                    print("Unknown movie: {0} ({1})".format(entry['title'], entry['year']))
+                    continue
                 else:
-                    print("Skipping movie" if is_imdb else "Using movie", movie)
+                    print("Using movie", movie)
 
                 site = ReviewsSite.objects.filter(name=entry['website']).first()
 
                 if movie and site and entry['score'] and entry['num_reviews']:
                     review = MovieReview(movie=movie, site=site, score=entry['score'], users=entry['num_reviews'])
                     review.save()
+
+                    reviews += 1
                     print("Created review", review)
 
             # transaction.commit()
-            print("Commited changes")
+            print("FINISHED. Created: {0}, Reviews: {1}, Processed: {2}".format(created, reviews, len(entries)))

@@ -1,6 +1,6 @@
 from django.http import Http404
 from django.shortcuts import render
-from django.db.models import Q, Avg
+from django.db.models import Q, Sum, Avg
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from movies.models import Movie, Genre
 
@@ -19,7 +19,10 @@ def movies_list(request):
             ).distinct()
         search_param = "search={0}&".format(search.replace(' ', '+'))
 
-    movie_set = movie_set.annotate(score=Avg('reviews__score')).order_by('-score')
+    movie_set = movie_set\
+        .annotate(score=Avg('reviews__score'))\
+        .annotate(num_reviews=Sum('reviews__users'))\
+        .order_by('-score')
 
     print([(movie.title, movie.score) for movie in movie_set[:10]])
     paginator = Paginator(movie_set, 30)
@@ -33,7 +36,8 @@ def movies_list(request):
         movies = paginator.page(paginator.num_pages)
 
     page_range = range(max(1, movies.number - 5), min(movies.number + 5, movies.paginator.num_pages) + 1)
-    return render(request, 'movies/list.html', dict(movies=movies, page_range=page_range, search_param=search_param))
+    return render(request, 'movies/list.html', dict(movies=movies, page_range=page_range,
+                                                    search=search, search_param=search_param))
 
 def movie_detail(request, movie_id):
     try:
