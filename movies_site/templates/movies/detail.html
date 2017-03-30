@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% load humanize %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="row detail">
+    <div class="col s5">
+        <div class="cover">
+            <img class="responsive-img" src="{{ movie.cover }}">
+            <div class="score {{ score_class }}">{{ score|floatformat:1 }}</div>
+        </div>
+    </div>
+    <div class="col s7">
+        <h2>{{ movie.title }} <span>({{ movie.year }})</span></h2>
+
+        <div class="info">
+            Duration: <div class="chip">{{ movie.duration|duration }}</div>
+            Genres: {% for genre in movie.genres.all %}<div class="chip">{{ genre }}</div>{% endfor %}
+        </div>
+
+        <div class="row">
+            <div class="col s12 m6">
+                <strong>Directors:</strong>
+                {% for director in movie.directors.all %}
+                    <a href="#">{{ director.full_name }}</a>
+                    {% if not forloop.last %},{% endif %}
+                {% endfor %}
+            </div>
+            <div class="col s12 m6">
+                <strong>Stars:</strong>
+                {% for actor in movie.actors.all %}
+                    <a href="#">{{ actor.full_name }}</a>
+                    {% if not forloop.last %},{% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <p>{{ movie.description }}</p>
+
+        <h4>Storyline</h4>
+        <p>{{ movie.storyline }}</p>
+
+        <div class="row reviews">
+            <h4>Reviews</h4>
+            {% for review in reviews %}
+                <div class="chip {{ score_class }}" title="{{ review.site.name }} (from {{ review.users|intword|intcomma }} reviews)">
+                    <img src="/static/img/{{ review.site.name|cut:" "|lower }}.png">
+                    {{ review.score }}
+                  </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

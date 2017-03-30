@@ -1,8 +1,10 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q, Sum, Avg
 from django.http import Http404
 from django.shortcuts import render
-from django.db.models import Q, Sum, Avg
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from movies.models import Movie, Genre
+
+from movies.models import Movie
+
 
 def movies_list(request):
     movie_set = Movie.objects.all()
@@ -18,6 +20,8 @@ def movies_list(request):
                 Q(directors__last_name__contains=term)
             ).distinct()
         search_param = "search={0}&".format(search.replace(' ', '+'))
+    else:
+        search = ''
 
     movie_set = movie_set\
         .annotate(score=Avg('reviews__score'))\
@@ -44,4 +48,15 @@ def movie_detail(request, movie_id):
         movie = Movie.objects.get(pk=movie_id)
     except Movie.DoesNotExist:
         raise Http404("Movie does not exist")
-    return render(request, 'movies/detail.html', {'movie': movie})
+
+    reviews = movie.reviews.all()
+    score = sum([review.score for review in reviews]) / len(reviews)
+
+    if score >= 7:
+        score_class = 'green'
+    elif score >= 5:
+        score_class = 'orange'
+    else:
+        score_class = 'red'
+
+    return render(request, 'movies/detail.html', dict(movie=movie, reviews=reviews, score=score, score_class=score_class))

@@ -19,7 +19,7 @@
             <div class="movie card">
                 <div class="card-image">
                     <a href="/movies/{{ movie.id }}">
-                        <img class="cover" src="{{ movie.cover }}">
+                        <img class="cover" src="{{ movie.cover }}" title="{{ movie.description }}">
                     </a>
                     <a class="btn-floating halfway-fab inactive red center" title="Based on {{ movie.num_reviews|intword|intcomma }} reviews"><span>{{ movie.score|floatformat:1 }}</span></a>
                 </div>

@@ -22,6 +22,44 @@ body {
     color: black;
 }
 
-.cover {
+.movie.card .cover {
     height: 260px;
+}
+
+.detail {
+    margin-top: 10px;
+}
+
+.detail .cover img {
+    width: 100%;
+}
+
+.detail h2 span {
+    font-size: 32px;
+}
+
+.detail .score {
+    position: relative;
+    float: right;
+    bottom: 90px;
+    width: 60px;
+    height: 60px;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    background-color: green;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.reviews .chip {
+    height: 30px;
+    font-size: 14px;
+    color: white;
+    line-height: 28px;
+}
+
+.reviews .chip img {
+    height: 30px;
+    width: 30px;
 }
