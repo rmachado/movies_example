@@ -38,3 +38,11 @@ python manage.py importdata ../movies_scraper/scraped/rottentomatoes.json
 ```
 python manage.py runserver
 ```
+
+## Screenshots
+
+![screen1](screenshots/screenshot_01.png)
+
+![screen2](screenshots/screenshot_02.png)
+
+![screen3](screenshots/screenshot_03.png)
