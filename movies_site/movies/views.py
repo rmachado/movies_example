@@ -28,7 +28,6 @@ def movies_list(request):
         .annotate(num_reviews=Sum('reviews__users'))\
         .order_by('-score')
 
-    print([(movie.title, movie.score) for movie in movie_set[:10]])
     paginator = Paginator(movie_set, 30)
 
     page = request.GET.get('page', 1)
