@@ -1,0 +1,4 @@
+.idea
+*.pyc
+movies_site/db.sqlite3
+movies_scraper/scraped
